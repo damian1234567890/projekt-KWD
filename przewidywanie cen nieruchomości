@@ -8,8 +8,6 @@ print(housing_data_data['DESCR'])
 
 print(housing_data_data.data[1,:]) 
 
- 
-
 from sklearn.preprocessing import StandardScaler 
 
 scaler = StandardScaler() 
@@ -26,27 +24,23 @@ housing_p.head()
 
 housing_p.describe() 
 
- 
-
 %matplotlib inline 
 
 import matplotlib.pyplot as plt 
 
 import seaborn as sb 
 
- 
-
-from sklearn.model_selection import train_test_split 
-
-housing_train, housing_test, housing_train_target, housing_test_target  =  \ 
-
-train_test_split(housing_data_data.data, housing_data_data.target, test_size=0.1, random_state=1010) 
-
   
 
 plot = sb.pairplot(housing_p, diag_kind="kde") 
 
- 
+from sklearn.model_selection import train_test_split 
+
+  
+
+housing_train, housing_test, housing_train_target, housing_test_target  =  \ 
+
+train_test_split(housing_data_data.data, housing_data_data.target, test_size=0.1, random_state=1010) 
 
 print(housing_train.shape) 
 
@@ -73,10 +67,6 @@ print("Błąd średniokwadratowy: %.2f" %
       mean_squared_error(housing_test_target, linear_regression.predict(housing_test))) 
 
 print('Wariancja: %.2f' % r2_score(housing_test_target, linear_regression.predict(housing_test))) 
-
-print(scores.mean()) 
-
-print(scores.std()) 
 
 id=2 
 
@@ -108,27 +98,29 @@ from sklearn.preprocessing import PolynomialFeatures
 
 pt = PolynomialFeatures(2, ) 
 
-housig_train_poly = pt.fit_transform(housig_train) 
+housing_train_poly = pt.fit_transform(housing_train) 
 
-housig_train_poly.shape 
+housing_train_poly.shape 
 
-housig_test_poly = pt.fit_transform(housig_test) 
+housig_test_poly = pt.fit_transform(housing_test) 
 
 lr_poly = LinearRegression(normalize=True) 
 
-lr_poly.fit(housig_train_poly, housig_train_target) 
+lr_poly.fit(housing_train_poly, housing_train_target) 
+
+housing_test_poly = pt.fit_transform(housing_test) 
 
 print("Błąd średniokwadratowy modelu z wielomianowymi cechami: %.2f" %  
 
-      mean_squared_error(housig_test_target, lr_poly.predict(housig_test_poly))) 
+      mean_squared_error(housing_test_target, lr_poly.predict(housing_test_poly))) 
 
-score = lr_poly.score(housig_test_poly, housig_test_target) 
+score = lr_poly.score(housing_test_poly, housing_test_target) 
 
 print("Wariancja modelu z wielomianowymi cechami: %.2f" % score) 
 
 id=2 
 
-linear_regression_prediction = lr_poly.predict(housig_test_poly[id,:].reshape(1,-1)) 
+linear_regression_prediction = lr_poly.predict(housing_test_poly[id,:].reshape(1,-1)) 
 
 print("Wartość przwidziana przez model dla id {0} wynosi {1}".format(id, linear_regression_prediction)) 
 
@@ -136,7 +128,7 @@ print("Rzeczywista wartość dla id {0} wynosi {1}".format(id, housing_test_targ
 
 id=7 
 
-linear_regression_prediction = lr_poly.predict(housig_test_poly[id,:].reshape(1,-1)) 
+linear_regression_prediction = lr_poly.predict(housing_test_poly[id,:].reshape(1,-1)) 
 
 print("Wartość przwidziana przez model dla id {0} wynosi {1}".format(id, linear_regression_prediction)) 
 
@@ -144,7 +136,7 @@ print("Rzeczywista wartość dla id {0} wynosi {1}".format(id, housing_test_targ
 
 id=17 
 
-linear_regression_prediction = lr_poly.predict(housig_test_poly[id,:].reshape(1,-1)) 
+linear_regression_prediction = lr_poly.predict(housing_test_poly[id,:].reshape(1,-1)) 
 
 print("Wartość przwidziana przez model dla id {0} wynosi {1}".format(id, linear_regression_prediction)) 
 
@@ -156,7 +148,7 @@ from sklearn.feature_selection import RFE
 
 sel_ = RFE(estimator=LinearRegression(normalize=False), n_features_to_select=60) 
 
-sel_.fit(housig_train_poly, housig_train_target) 
+sel_.fit(housing_train_poly, housing_train_target) 
 
   
 
@@ -166,15 +158,15 @@ print(sel_.ranking_)
 
 print("Błąd średniokwadratowy modelu z wybranymi cechami wielomianowymi: %.2f" %  
 
-      mean_squared_error(housig_test_target, sel_.predict(housig_test_poly))) 
+      mean_squared_error(housing_test_target, sel_.predict(housing_test_poly))) 
 
-score = sel_.score(housig_test_poly, housig_test_target) #r2_score 
+score = sel_.score(housing_test_poly, housing_test_target) #r2_score 
 
 print("Wariancja modelu z wybranymi cechami wielomianowymi: %.2f" % score) 
 
 id=2 
 
-linear_regression_prediction = sel_.predict(housig_test_poly[id,:].reshape(1,-1)) 
+linear_regression_prediction = sel_.predict(housing_test_poly[id,:].reshape(1,-1)) 
 
 print("Wartość przwidziana przez model dla id {0} wynosi {1}".format(id, linear_regression_prediction)) 
 
@@ -182,7 +174,7 @@ print("Rzeczywista wartość dla id {0} wynosi {1}".format(id, housing_test_targ
 
 id=7 
 
-linear_regression_prediction = sel_.predict(housig_test_poly[id,:].reshape(1,-1)) 
+linear_regression_prediction = sel_.predict(housing_test_poly[id,:].reshape(1,-1)) 
 
 print("Wartość przwidziana przez model dla id {0} wynosi {1}".format(id, linear_regression_prediction)) 
 
@@ -190,7 +182,7 @@ print("Rzeczywista wartość dla id {0} wynosi {1}".format(id, housing_test_targ
 
 id=17 
 
-linear_regression_prediction = sel_.predict(housig_test_poly[id,:].reshape(1,-1)) 
+linear_regression_prediction = sel_.predict(housing_test_poly[id,:].reshape(1,-1)) 
 
 print("Wartość przwidziana przez model dla id {0} wynosi {1}".format(id, linear_regression_prediction)) 
 
@@ -198,7 +190,7 @@ print("Rzeczywista wartość dla id {0} wynosi {1}".format(id, housing_test_targ
 
 sel_ = RFE(estimator=LinearRegression(normalize=False), n_features_to_select=100) 
 
-sel_.fit(housig_train_poly, housig_train_target) 
+sel_.fit(housing_train_poly, housing_train_target) 
 
   
 
@@ -208,29 +200,21 @@ print(sel_.ranking_)
 
 print("Błąd średniokwadratowy modelu z wybranymi cechami wielomianowymi: %.2f" %  
 
-      mean_squared_error(housig_test_target, sel_.predict(housig_test_poly))) 
+      mean_squared_error(housing_test_target, sel_.predict(housing_test_poly))) 
 
-score = sel_.score(housig_test_poly, housig_test_target) 
+score = sel_.score(housing_test_poly, housing_test_target) 
 
 print("Wariancja modelu z wybranymi cechami wielomianowymi: %.2f" % score) 
 
 sel_ = RFE(estimator=LinearRegression(normalize=False), n_features_to_select=30) 
 
-sel_.fit(housig_train_poly, housig_train_target) 
+sel_.fit(housing_train_poly, housing_train_target) 
 
   
 
 print(sel_.support_) 
 
 print(sel_.ranking_) 
-
-print("Błąd średniokwadratowy modelu z wybranymi cechami wielomianowymi: %.2f" %  
-
-      mean_squared_error(housig_test_target, sel_.predict(housig_test_poly))) 
-
-score = sel_.score(housig_test_poly, housig_test_target) 
-
-print("Wariancja modelu z wybranymi cechami wielomianowymi: %.2f" % score) 
 
 from sklearn.linear_model import Lasso 
 
@@ -238,15 +222,15 @@ from sklearn.linear_model import Lasso
 
 lasso_r = Lasso(alpha=0.5, max_iter=5000,) 
 
-lasso_r.fit(housig_train_poly, housig_train_target) 
+lasso_r.fit(housing_train_poly, housing_train_target) 
 
   
 
 print("Błąd średniokwadratowy modelu z lassem: %.2f" %  
 
-      mean_squared_error(housig_test_target, lr_poly.predict(housig_test_poly))) 
+      mean_squared_error(housing_test_target, lr_poly.predict(housing_test_poly))) 
 
-score = lasso_r.score(housig_test_poly, housig_test_target) 
+score = lasso_r.score(housing_test_poly, housing_test_target) 
 
 print("Wariancja modelu z lassem: %.2f" % score) 
 
@@ -256,15 +240,15 @@ from sklearn.linear_model import Lasso
 
 lasso_r = Lasso(alpha=0.8, max_iter=5000,) 
 
-lasso_r.fit(housig_train_poly, housig_train_target) 
+lasso_r.fit(housing_train_poly, housing_train_target) 
 
   
 
 print("Błąd średniokwadratowy modelu z lassem: %.2f" %  
 
-      mean_squared_error(housig_test_target, lr_poly.predict(housig_test_poly))) 
+      mean_squared_error(housing_test_target, lr_poly.predict(housing_test_poly))) 
 
-score = lasso_r.score(housig_test_poly, housig_test_target) 
+score = lasso_r.score(housing_test_poly, housing_test_target) 
 
 print("Wariancja modelu z lassem: %.2f" % score) 
 
@@ -274,21 +258,21 @@ from sklearn.linear_model import Lasso
 
 lasso_r = Lasso(alpha=0.2, max_iter=5000,) 
 
-lasso_r.fit(housig_train_poly, housig_train_target) 
+lasso_r.fit(housing_train_poly, housing_train_target) 
 
   
 
 print("Błąd średniokwadratowy modelu z lassem: %.2f" %  
 
-      mean_squared_error(housig_test_target, lr_poly.predict(housig_test_poly))) 
+      mean_squared_error(housing_test_target, lr_poly.predict(housing_test_poly))) 
 
-score = lasso_r.score(housig_test_poly, housig_test_target) 
+score = lasso_r.score(housing_test_poly, housing_test_target) 
 
 print("Wariancja modelu z lassem: %.2f" % score) 
 
 id=2 
 
-linear_regression_prediction = lasso_r.predict(housig_test_poly[id,:].reshape(1,-1)) 
+linear_regression_prediction = lasso_r.predict(housing_test_poly[id,:].reshape(1,-1)) 
 
 print("Wartość przwidziana przez model dla id {0} wynosi {1}".format(id, linear_regression_prediction)) 
 
@@ -296,7 +280,7 @@ print("Rzeczywista wartość dla id {0} wynosi {1}".format(id, housing_test_targ
 
 id=7 
 
-linear_regression_prediction = lasso_r.predict(housig_test_poly[id,:].reshape(1,-1)) 
+linear_regression_prediction = lasso_r.predict(housing_test_poly[id,:].reshape(1,-1)) 
 
 print("Wartość przwidziana przez model dla id {0} wynosi {1}".format(id, linear_regression_prediction)) 
 
@@ -304,7 +288,7 @@ print("Rzeczywista wartość dla id {0} wynosi {1}".format(id, housing_test_targ
 
 id=17 
 
-linear_regression_prediction = lasso_r.predict(housig_test_poly[id,:].reshape(1,-1)) 
+linear_regression_prediction = lasso_r.predict(housing_test_poly[id,:].reshape(1,-1)) 
 
 print("Wartość przwidziana przez model dla id {0} wynosi {1}".format(id, linear_regression_prediction)) 
 
@@ -313,5 +297,9 @@ print("Rzeczywista wartość dla id {0} wynosi {1}".format(id, housing_test_targ
 from sklearn.model_selection import cross_val_score 
 
 scores = cross_val_score(LinearRegression(), housing_data_data['data'], housing_data_data['target'], cv=5) 
+
+print(scores.mean()) 
+
+print(scores.std()) 
 
 print(scores) 
